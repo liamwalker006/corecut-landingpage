@@ -89,7 +89,7 @@ export default function OptInPage() {
           {/* Logo */}
           <a href="https://corecutdigital.co.uk" target="_blank" rel="noopener noreferrer">
             <Image
-              src="/logo.png"
+              src="/Logo.jpg"
               alt="CoreCut Digital"
               width={160}
               height={40}
@@ -143,9 +143,10 @@ export default function OptInPage() {
             fontSize: 'clamp(32px, 8vw, 52px)',
           }}
         >
-          SECURE <span style={{ color: '#7DD4D4' }}>25–30 EXCLUSIVE,</span>{' '}
-          ROOFING JOBS <span style={{ textDecoration: 'underline' }}>WITHOUT</span>{' '}
-          <span style={{ color: '#7DD4D4' }}>DEALING WITH TYRE KICKERS</span>
+          SECURE AN ADDITIONAL{' '}
+          <span style={{ color: '#7DD4D4' }}>15–30 EXCLUSIVE,</span>{' '}
+          QUALIFIED ROOFING APPOINTMENTS{' '}
+          <span style={{ textDecoration: 'underline' }}>IN THE NEXT 30 DAYS</span>
         </h1>
 
         {/* Subheadline */}
