@@ -163,7 +163,7 @@ export default function OptInPage() {
           style={{
             fontFamily: 'var(--font-barlow)',
             fontWeight: 900,
-            fontSize: 'clamp(19px, 5.8vw, 50px)',
+            fontSize: 'clamp(19px, 6.1vw, 52px)',
             lineHeight: 1.25,
           }}
         >
@@ -177,7 +177,7 @@ export default function OptInPage() {
               display: 'inline-block',
             }}
           >
-            EXCLUSIVE,
+            EXCLUSIVE
           </span>{' '}
           <span
             style={{
