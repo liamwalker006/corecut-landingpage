@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import { Calendar } from 'lucide-react'
+import Script from 'next/script'
 
 const reviews = [
   {
@@ -352,36 +352,29 @@ export default function OptInPage() {
             {/* ── STEP 4: Calendar Booking ── */}
             {step === 4 && (
               <div>
-                <div className="flex justify-center mb-4">
-                  <span className="bg-green-50 border border-green-300 rounded-full px-4 py-2 text-green-700 text-sm font-medium w-fit">
-                    🟢 We still have 1 spot available in {formData.city || 'your'} area
+                <div className="flex justify-center mb-3">
+                  <span className="bg-green-50 border border-green-300 rounded-full px-3 py-1.5 text-green-700 text-xs font-semibold">
+                    🟢 1 spot available in {formData.city || 'your'} area
                   </span>
                 </div>
 
-                <h2 className="font-bold text-gray-900 text-xl text-center mb-2">
-                  Book Your Free 10-Min Strategy Call
+                <h2 className="font-bold text-gray-900 text-xl text-center mb-1">
+                  Book Your Free Strategy Call
                 </h2>
-
-                <p className="text-gray-500 text-sm text-center mb-6 leading-relaxed">
-                  Speak with one of our strategists. We&apos;ll show you exactly how many leads we can get you in your area — no pitch, no pressure.
+                <p className="text-gray-400 text-sm text-center mb-4">
+                  10 minutes. No pitch. Just a clear plan for your area.
                 </p>
 
-                {/* Calendar placeholder */}
-                <div className="bg-gray-50 border border-gray-200 rounded-xl p-8 text-center min-h-[300px] flex items-center justify-center flex-col gap-3">
-                  <Calendar className="w-12 h-12 text-[#7DD4D4]" />
-                  <p className="text-gray-400 text-sm uppercase tracking-widest">
-                    Calendar Booking Widget
-                  </p>
-                  {/* ADD CALENDLY OR CAL.COM EMBED HERE */}
-                  <a
-                    href="https://appointment.socialscapepromotions.co.uk/widget/bookings/socialscape-roofing-setup"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#7DD4D4] text-sm underline hover:text-[#6ac4c4] transition"
-                  >
-                    Book manually →
-                  </a>
-                </div>
+                <iframe
+                  src="https://schedule.socialscapepromotions.co.uk/widget/booking/miBViE5m9echq1eNJLud"
+                  style={{ width: '100%', border: 'none', overflow: 'hidden', minHeight: '550px' }}
+                  scrolling="no"
+                  id="miBViE5m9echq1eNJLud_1780864395399"
+                />
+                <Script
+                  src="https://schedule.socialscapepromotions.co.uk/js/form_embed.js"
+                  strategy="lazyOnload"
+                />
 
                 <FormReviewBar />
               </div>
