@@ -140,7 +140,7 @@ export default function OptInPage() {
       </header>
 
       {/* ── HERO ── */}
-      <section className="max-w-4xl mx-auto px-4 pt-5 pb-4 text-center">
+      <section className="max-w-4xl mx-auto px-4 pt-5 pb-2 text-center">
 
         {/* Pill label */}
         <div className="flex justify-center mb-5">
@@ -196,15 +196,11 @@ export default function OptInPage() {
           <span style={{ textDecoration: 'underline' }}>IN THE NEXT 30 DAYS</span>
         </h1>
 
-        {/* Subheadline */}
-        <p className="text-sm text-gray-400 text-center max-w-lg mx-auto mt-4 leading-relaxed">
-          Our typical roofing partner generates £30,000–£90,000 in new revenue within their first 30 days
-        </p>
       </section>
 
       {/* ── 3-STEP FORM ── */}
-      <section className="max-w-4xl mx-auto px-4 pt-2 pb-12">
-        <div className="max-w-md mx-auto mt-8">
+      <section className="max-w-4xl mx-auto px-4 pt-0 pb-12">
+        <div className="max-w-md mx-auto mt-3">
           <div className="bg-white rounded-2xl p-6 shadow-xl">
 
             {/* Progress bar */}
