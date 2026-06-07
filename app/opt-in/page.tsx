@@ -163,8 +163,8 @@ export default function OptInPage() {
           style={{
             fontFamily: 'var(--font-barlow)',
             fontWeight: 900,
-            fontSize: 'clamp(22px, 5.5vw, 36px)',
-            lineHeight: 1.2,
+            fontSize: 'clamp(26px, 6.5vw, 42px)',
+            lineHeight: 1.25,
           }}
         >
           SECURE 15–30{' '}
@@ -189,8 +189,10 @@ export default function OptInPage() {
             }}
           >
             QUALIFIED
-          </span>{' '}
-          ROOFING APPOINTMENTS{' '}
+          </span>
+          <br />
+          ROOFING APPOINTMENTS
+          <br />
           <span style={{ textDecoration: 'underline' }}>IN THE NEXT 30 DAYS</span>
         </h1>
 
