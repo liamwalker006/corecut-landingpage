@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Script from 'next/script'
 
@@ -107,6 +107,16 @@ export default function OptInPage() {
     setIsSubmitting(false)
     setStep(4)
   }
+
+  useEffect(() => {
+    function handleBookingMessage(event: MessageEvent) {
+      if (Array.isArray(event.data) && event.data[0] === 'msgsndr-booking-complete') {
+        ;(window as any).fbq?.('track', 'Schedule')
+      }
+    }
+    window.addEventListener('message', handleBookingMessage)
+    return () => window.removeEventListener('message', handleBookingMessage)
+  }, [])
 
   const progressWidth = step === 1 ? '25%' : step === 2 ? '50%' : step === 3 ? '75%' : '100%'
 
