@@ -56,6 +56,7 @@ export default function OptInPage() {
   const [step, setStep] = useState(1)
   const [showDisqualify, setShowDisqualify] = useState(false)
   const [isSearching, setIsSearching] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
     company: '',
@@ -87,9 +88,23 @@ export default function OptInPage() {
     }, 2500)
   }
 
-  function handleStep3Submit() {
+  async function handleStep3Submit() {
     const { phone, email } = formData
     if (!phone || !email) return
+    setIsSubmitting(true)
+    try {
+      await fetch(
+        'https://services.leadconnectorhq.com/hooks/MWTJgFgGeot9Z3Ok9tyb/webhook-trigger/28a2e0ab-2846-406b-aaed-9c913701bfd8',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        }
+      )
+    } catch (_) {
+      // Silently continue — don't block the user if the webhook fails
+    }
+    setIsSubmitting(false)
     setStep(4)
   }
 
@@ -335,9 +350,17 @@ export default function OptInPage() {
 
                   <button
                     onClick={handleStep3Submit}
-                    className="bg-[#7DD4D4] text-black font-bold rounded-xl py-4 w-full mt-2 text-base hover:bg-[#6ac4c4] transition-colors duration-200"
+                    disabled={isSubmitting}
+                    className="bg-[#7DD4D4] text-black font-bold rounded-xl py-4 w-full mt-2 text-base hover:bg-[#6ac4c4] transition-colors duration-200 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
-                    Continue →
+                    {isSubmitting ? (
+                      <>
+                        <span className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                        Sending…
+                      </>
+                    ) : (
+                      'Continue →'
+                    )}
                   </button>
 
                   <p className="text-xs text-gray-400 text-center mt-2">
