@@ -55,6 +55,7 @@ const FormReviewBar = () => (
 export default function OptInPage() {
   const [step, setStep] = useState(1)
   const [showDisqualify, setShowDisqualify] = useState(false)
+  const [isSearching, setIsSearching] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
     company: '',
@@ -79,7 +80,11 @@ export default function OptInPage() {
   function handleStep2Submit() {
     const { name, company, city } = formData
     if (!name || !company || !city) return
-    setStep(3)
+    setIsSearching(true)
+    setTimeout(() => {
+      setIsSearching(false)
+      setStep(3)
+    }, 2500)
   }
 
   function handleStep3Submit() {
@@ -231,7 +236,7 @@ export default function OptInPage() {
             )}
 
             {/* ── STEP 2: Name, Company, City ── */}
-            {step === 2 && (
+            {step === 2 && !isSearching && (
               <div>
                 <button
                   onClick={() => setStep(1)}
@@ -274,11 +279,25 @@ export default function OptInPage() {
                     onClick={handleStep2Submit}
                     className="bg-[#7DD4D4] text-black font-bold rounded-xl py-4 w-full mt-2 text-base hover:bg-[#6ac4c4] transition-colors duration-200"
                   >
-                    Continue →
+                    Check Availability →
                   </button>
                 </div>
 
                 <FormReviewBar />
+              </div>
+            )}
+
+            {/* ── SEARCHING LOADER ── */}
+            {step === 2 && isSearching && (
+              <div className="flex flex-col items-center justify-center py-10 gap-5">
+                <div className="relative w-14 h-14">
+                  <div className="absolute inset-0 rounded-full border-4 border-gray-100" />
+                  <div className="absolute inset-0 rounded-full border-4 border-[#7DD4D4] border-t-transparent animate-spin" />
+                </div>
+                <div className="text-center">
+                  <p className="font-bold text-gray-900 text-base">Searching for availability</p>
+                  <p className="text-gray-400 text-sm mt-1">in {formData.city || 'your'} area…</p>
+                </div>
               </div>
             )}
 
@@ -318,7 +337,7 @@ export default function OptInPage() {
                     onClick={handleStep3Submit}
                     className="bg-[#7DD4D4] text-black font-bold rounded-xl py-4 w-full mt-2 text-base hover:bg-[#6ac4c4] transition-colors duration-200"
                   >
-                    Check Availability →
+                    Continue →
                   </button>
 
                   <p className="text-xs text-gray-400 text-center mt-2">
