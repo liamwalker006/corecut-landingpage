@@ -145,7 +145,7 @@ export default function OptInPage() {
         {/* Pill label */}
         <div className="flex justify-center mb-5">
           <span
-            className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.15em] uppercase px-4 py-2 rounded-full"
+            className="pill-animate inline-flex items-center gap-2 text-xs font-semibold tracking-[0.15em] uppercase px-4 py-2 rounded-full"
             style={{
               background: 'rgba(125, 212, 212, 0.1)',
               border: '1px solid rgba(125, 212, 212, 0.35)',
@@ -163,7 +163,7 @@ export default function OptInPage() {
           style={{
             fontFamily: 'var(--font-barlow)',
             fontWeight: 900,
-            fontSize: 'clamp(30px, 7.5vw, 50px)',
+            fontSize: 'clamp(22px, 5.5vw, 36px)',
             lineHeight: 1.2,
           }}
         >
