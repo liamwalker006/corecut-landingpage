@@ -25,6 +25,13 @@ const reviews = [
   },
 ]
 
+const avatars = [
+  { initials: 'JS', bg: '#7DD4D4' },
+  { initials: 'LA', bg: '#5bbfbf' },
+  { initials: 'AS', bg: '#44aaaa' },
+  { initials: 'MR', bg: '#2e9595' },
+]
+
 const GoogleG = () => (
   <svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true" className="flex-shrink-0">
     <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.33 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
@@ -41,6 +48,26 @@ const SmallGoogleLogo = () => (
     <path d="M3.964 10.707A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.707V4.961H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.039l3.007-2.332z" fill="#FBBC05"/>
     <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.961L3.964 7.293C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
   </svg>
+)
+
+const FormReviewBar = () => (
+  <div className="border-t border-gray-100 mt-6 pt-5 flex flex-col items-center gap-1.5">
+    <div className="flex items-center">
+      {avatars.map((av, i) => (
+        <div
+          key={i}
+          className="w-9 h-9 rounded-full border-2 border-white flex items-center justify-center text-xs font-bold text-black flex-shrink-0"
+          style={{ background: av.bg, marginLeft: i === 0 ? 0 : '-10px', zIndex: avatars.length - i }}
+        >
+          {av.initials}
+        </div>
+      ))}
+    </div>
+    <div className="text-amber-400 text-base leading-none mt-0.5">★★★★★</div>
+    <p className="text-gray-500 text-xs text-center">
+      Rated <span className="font-bold text-gray-800">5.0/5</span> by <span className="font-bold text-gray-800">57+</span> roofing businesses
+    </p>
+  </div>
 )
 
 export default function OptInPage() {
@@ -83,11 +110,10 @@ export default function OptInPage() {
       }}
     >
 
-      {/* ── HEADER: Logo left, Google badge right ── */}
+      {/* ── HEADER: Logo left (nudged in), Google badge right ── */}
       <header className="pt-4 pb-4">
         <div className="max-w-4xl mx-auto px-4 flex items-center justify-between">
-          {/* Logo */}
-          <a href="https://corecutdigital.co.uk" target="_blank" rel="noopener noreferrer">
+          <a href="https://corecutdigital.co.uk" target="_blank" rel="noopener noreferrer" className="ml-6">
             <Image
               src="/Logo.jpg"
               alt="CoreCut Digital"
@@ -126,26 +152,45 @@ export default function OptInPage() {
               color: '#7DD4D4',
             }}
           >
-            <span
-              className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-              style={{ background: '#7DD4D4' }}
-            />
+            <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: '#7DD4D4' }} />
             For Roofing Companies
           </span>
         </div>
 
-        {/* Headline */}
+        {/* Headline — 'EXCLUSIVE' and 'QUALIFIED' get teal pill backgrounds */}
         <h1
-          className="uppercase text-center leading-tight"
+          className="uppercase text-center"
           style={{
             fontFamily: 'var(--font-barlow)',
             fontWeight: 900,
-            fontSize: 'clamp(32px, 8vw, 52px)',
+            fontSize: 'clamp(30px, 7.5vw, 50px)',
+            lineHeight: 1.2,
           }}
         >
-          SECURE AN ADDITIONAL{' '}
-          <span style={{ color: '#7DD4D4' }}>15–30 EXCLUSIVE,</span>{' '}
-          QUALIFIED ROOFING APPOINTMENTS{' '}
+          SECURE 15–30{' '}
+          <span
+            style={{
+              background: '#7DD4D4',
+              color: '#000',
+              borderRadius: '6px',
+              padding: '1px 10px 3px',
+              display: 'inline-block',
+            }}
+          >
+            EXCLUSIVE,
+          </span>{' '}
+          <span
+            style={{
+              background: '#7DD4D4',
+              color: '#000',
+              borderRadius: '6px',
+              padding: '1px 10px 3px',
+              display: 'inline-block',
+            }}
+          >
+            QUALIFIED
+          </span>{' '}
+          ROOFING APPOINTMENTS{' '}
           <span style={{ textDecoration: 'underline' }}>IN THE NEXT 30 DAYS</span>
         </h1>
 
@@ -158,11 +203,11 @@ export default function OptInPage() {
       {/* ── 3-STEP FORM ── */}
       <section className="max-w-4xl mx-auto px-4 pt-2 pb-12">
         <div className="max-w-md mx-auto mt-8">
-          <div className="bg-[#111111] border border-white/10 rounded-2xl p-6">
+          <div className="bg-white rounded-2xl p-6 shadow-xl">
 
             {/* Progress bar */}
-            <p className="text-xs text-gray-500 text-right mb-2">Step {step} of 3</p>
-            <div className="h-1.5 rounded-full bg-[#1a1a1a] mb-6 overflow-hidden">
+            <p className="text-xs text-gray-400 text-right mb-2">Step {step} of 3</p>
+            <div className="h-1.5 rounded-full bg-gray-100 mb-6 overflow-hidden">
               <div
                 className="h-full rounded-full bg-[#7DD4D4] transition-all duration-300"
                 style={{ width: progressWidth }}
@@ -172,14 +217,14 @@ export default function OptInPage() {
             {/* ── STEP 1: Qualification ── */}
             {step === 1 && (
               <div>
-                <p className="font-bold text-white text-lg text-center mb-6">
+                <p className="font-bold text-gray-900 text-lg text-center mb-6">
                   Do you own a roofing business?
                 </p>
 
                 <div className="flex flex-col gap-3">
                   <button
                     onClick={() => handleQualification(true)}
-                    className="w-full bg-[#1a1a1a] border border-white/10 rounded-xl px-4 py-4 text-white text-left flex items-center gap-3 hover:border-[#7DD4D4] transition cursor-pointer"
+                    className="w-full bg-white border border-gray-200 rounded-xl px-4 py-4 text-gray-900 text-left flex items-center gap-3 hover:border-[#7DD4D4] transition cursor-pointer shadow-sm"
                   >
                     <span>✅</span>
                     <span>Yes — I have a team of staff or subbies</span>
@@ -187,7 +232,7 @@ export default function OptInPage() {
 
                   <button
                     onClick={() => handleQualification(true)}
-                    className="w-full bg-[#1a1a1a] border border-white/10 rounded-xl px-4 py-4 text-white text-left flex items-center gap-3 hover:border-[#7DD4D4] transition cursor-pointer"
+                    className="w-full bg-white border border-gray-200 rounded-xl px-4 py-4 text-gray-900 text-left flex items-center gap-3 hover:border-[#7DD4D4] transition cursor-pointer shadow-sm"
                   >
                     <span>✅</span>
                     <span>Yes — but it&apos;s just me at the moment</span>
@@ -195,7 +240,7 @@ export default function OptInPage() {
 
                   <button
                     onClick={() => handleQualification(false)}
-                    className="w-full bg-[#1a1a1a] border border-white/10 rounded-xl px-4 py-4 text-white text-left flex items-center gap-3 hover:border-[#7DD4D4] transition cursor-pointer"
+                    className="w-full bg-white border border-gray-200 rounded-xl px-4 py-4 text-gray-900 text-left flex items-center gap-3 hover:border-[#7DD4D4] transition cursor-pointer shadow-sm"
                   >
                     <span>❌</span>
                     <span>No — I don&apos;t own a roofing business</span>
@@ -203,14 +248,16 @@ export default function OptInPage() {
                 </div>
 
                 {showDisqualify && (
-                  <div className="bg-red-950 border border-red-800 rounded-xl p-4 mt-4 text-center">
-                    <p className="text-sm text-red-300">
+                  <div className="bg-red-50 border border-red-200 rounded-xl p-4 mt-4 text-center">
+                    <p className="text-sm text-red-600">
                       You may not be a good fit for CoreCut at this stage.
                       <br />
                       Our system works best for roofing business owners.
                     </p>
                   </div>
                 )}
+
+                <FormReviewBar />
               </div>
             )}
 
@@ -219,12 +266,12 @@ export default function OptInPage() {
               <div>
                 <button
                   onClick={() => setStep(1)}
-                  className="text-sm text-gray-500 mb-4 block hover:text-gray-300 transition"
+                  className="text-sm text-gray-400 mb-4 block hover:text-gray-600 transition"
                 >
                   ← Back
                 </button>
 
-                <p className="font-bold text-white text-lg text-center mb-6">
+                <p className="font-bold text-gray-900 text-lg text-center mb-6">
                   Where should we send your availability confirmation?
                 </p>
 
@@ -235,7 +282,7 @@ export default function OptInPage() {
                     value={formData.name}
                     onChange={handleFieldChange}
                     placeholder="Your full name"
-                    className="bg-[#0a0a0a] border border-white/10 rounded-xl px-4 py-3 text-white w-full mb-3 focus:outline-none focus:border-[#7DD4D4] transition placeholder:text-gray-600"
+                    className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 w-full mb-3 focus:outline-none focus:border-[#7DD4D4] transition placeholder:text-gray-400"
                   />
                   <input
                     type="text"
@@ -243,7 +290,7 @@ export default function OptInPage() {
                     value={formData.company}
                     onChange={handleFieldChange}
                     placeholder="Your roofing company"
-                    className="bg-[#0a0a0a] border border-white/10 rounded-xl px-4 py-3 text-white w-full mb-3 focus:outline-none focus:border-[#7DD4D4] transition placeholder:text-gray-600"
+                    className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 w-full mb-3 focus:outline-none focus:border-[#7DD4D4] transition placeholder:text-gray-400"
                   />
                   <input
                     type="tel"
@@ -251,7 +298,7 @@ export default function OptInPage() {
                     value={formData.phone}
                     onChange={handleFieldChange}
                     placeholder="Your phone number"
-                    className="bg-[#0a0a0a] border border-white/10 rounded-xl px-4 py-3 text-white w-full mb-3 focus:outline-none focus:border-[#7DD4D4] transition placeholder:text-gray-600"
+                    className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 w-full mb-3 focus:outline-none focus:border-[#7DD4D4] transition placeholder:text-gray-400"
                   />
                   <input
                     type="email"
@@ -259,7 +306,7 @@ export default function OptInPage() {
                     value={formData.email}
                     onChange={handleFieldChange}
                     placeholder="Your email address"
-                    className="bg-[#0a0a0a] border border-white/10 rounded-xl px-4 py-3 text-white w-full mb-3 focus:outline-none focus:border-[#7DD4D4] transition placeholder:text-gray-600"
+                    className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 w-full mb-3 focus:outline-none focus:border-[#7DD4D4] transition placeholder:text-gray-400"
                   />
                   <input
                     type="text"
@@ -267,7 +314,7 @@ export default function OptInPage() {
                     value={formData.city}
                     onChange={handleFieldChange}
                     placeholder="e.g. Manchester, Leeds, Bristol"
-                    className="bg-[#0a0a0a] border border-white/10 rounded-xl px-4 py-3 text-white w-full mb-3 focus:outline-none focus:border-[#7DD4D4] transition placeholder:text-gray-600"
+                    className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 w-full mb-3 focus:outline-none focus:border-[#7DD4D4] transition placeholder:text-gray-400"
                   />
 
                   <button
@@ -277,10 +324,12 @@ export default function OptInPage() {
                     Check Availability →
                   </button>
 
-                  <p className="text-xs text-gray-600 text-center mt-2">
+                  <p className="text-xs text-gray-400 text-center mt-2">
                     No obligation. Takes less than 60 seconds.
                   </p>
                 </div>
+
+                <FormReviewBar />
               </div>
             )}
 
@@ -289,23 +338,23 @@ export default function OptInPage() {
               <div>
                 {/* Green availability pill */}
                 <div className="flex justify-center mb-4">
-                  <span className="bg-green-950 border border-green-700 rounded-full px-4 py-2 text-green-400 text-sm font-medium w-fit">
+                  <span className="bg-green-50 border border-green-300 rounded-full px-4 py-2 text-green-700 text-sm font-medium w-fit">
                     🟢 We still have 1 spot available in {formData.city || 'your'} area
                   </span>
                 </div>
 
-                <h2 className="font-bold text-white text-xl text-center mb-2">
+                <h2 className="font-bold text-gray-900 text-xl text-center mb-2">
                   Book Your Free 10-Min Strategy Call
                 </h2>
 
-                <p className="text-gray-400 text-sm text-center mb-6 leading-relaxed">
+                <p className="text-gray-500 text-sm text-center mb-6 leading-relaxed">
                   Speak with one of our strategists. We&apos;ll show you exactly how many leads we can get you in your area — no pitch, no pressure.
                 </p>
 
                 {/* Calendar placeholder */}
-                <div className="bg-[#0a0a0a] border border-white/10 rounded-xl p-8 text-center min-h-[300px] flex items-center justify-center flex-col gap-3">
+                <div className="bg-gray-50 border border-gray-200 rounded-xl p-8 text-center min-h-[300px] flex items-center justify-center flex-col gap-3">
                   <Calendar className="w-12 h-12 text-[#7DD4D4]" />
-                  <p className="text-gray-600 text-sm uppercase tracking-widest">
+                  <p className="text-gray-400 text-sm uppercase tracking-widest">
                     Calendar Booking Widget
                   </p>
                   {/* ADD CALENDLY OR CAL.COM EMBED HERE */}
@@ -318,6 +367,8 @@ export default function OptInPage() {
                     Book manually →
                   </a>
                 </div>
+
+                <FormReviewBar />
               </div>
             )}
 
