@@ -163,7 +163,7 @@ export default function OptInPage() {
           style={{
             fontFamily: 'var(--font-barlow)',
             fontWeight: 900,
-            fontSize: 'clamp(26px, 6.5vw, 42px)',
+            fontSize: 'clamp(15px, 5vw, 44px)',
             lineHeight: 1.25,
           }}
         >
