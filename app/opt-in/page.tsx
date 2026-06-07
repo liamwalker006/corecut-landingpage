@@ -25,13 +25,6 @@ const reviews = [
   },
 ]
 
-const avatars = [
-  { initials: 'JS', bg: '#7DD4D4' },
-  { initials: 'LA', bg: '#5bbfbf' },
-  { initials: 'AS', bg: '#44aaaa' },
-  { initials: 'MR', bg: '#2e9595' },
-]
-
 const GoogleG = () => (
   <svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true" className="flex-shrink-0">
     <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.33 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
@@ -51,19 +44,8 @@ const SmallGoogleLogo = () => (
 )
 
 const FormReviewBar = () => (
-  <div className="border-t border-gray-100 mt-6 pt-5 flex flex-col items-center gap-1.5">
-    <div className="flex items-center">
-      {avatars.map((av, i) => (
-        <div
-          key={i}
-          className="w-9 h-9 rounded-full border-2 border-white flex items-center justify-center text-xs font-bold text-black flex-shrink-0"
-          style={{ background: av.bg, marginLeft: i === 0 ? 0 : '-10px', zIndex: avatars.length - i }}
-        >
-          {av.initials}
-        </div>
-      ))}
-    </div>
-    <div className="text-amber-400 text-base leading-none mt-0.5">★★★★★</div>
+  <div className="border-t border-gray-100 mt-6 pt-4 flex flex-col items-center gap-1">
+    <div className="text-amber-400 text-lg leading-none">★★★★★</div>
     <p className="text-gray-500 text-xs text-center">
       Rated <span className="font-bold text-gray-800">5.0/5</span> by <span className="font-bold text-gray-800">57+</span> roofing businesses
     </p>
@@ -157,7 +139,7 @@ export default function OptInPage() {
           </span>
         </div>
 
-        {/* Headline — 'EXCLUSIVE' and 'QUALIFIED' get teal pill backgrounds */}
+        {/* Headline */}
         <h1
           className="uppercase text-center"
           style={{
@@ -167,34 +149,17 @@ export default function OptInPage() {
             lineHeight: 1.25,
           }}
         >
-          SECURE 15–30{' '}
-          <span
-            style={{
-              background: '#7DD4D4',
-              color: '#000',
-              borderRadius: '6px',
-              padding: '1px 10px 3px',
-              display: 'inline-block',
-            }}
-          >
-            EXCLUSIVE
-          </span>{' '}
-          <span
-            style={{
-              background: '#7DD4D4',
-              color: '#000',
-              borderRadius: '6px',
-              padding: '1px 10px 3px',
-              display: 'inline-block',
-            }}
-          >
-            QUALIFIED
-          </span>
+          SECURE 15–30 <span style={{ color: '#7DD4D4' }}>EXCLUSIVE</span>
           <br />
-          ROOFING APPOINTMENTS
+          <span style={{ color: '#7DD4D4' }}>QUALIFIED</span> ROOFING APPOINTMENTS
           <br />
-          <span style={{ textDecoration: 'underline' }}>IN THE NEXT 30 DAYS</span>
+          <span style={{ color: 'rgba(255,255,255,0.7)', fontWeight: 700 }}>IN THE NEXT 30 DAYS</span>
         </h1>
+
+        {/* Urgency subheading */}
+        <p className="text-xs text-center mt-3 font-semibold tracking-wide" style={{ color: '#7DD4D4' }}>
+          ⚡ Only 1 spot remaining in most UK areas
+        </p>
 
       </section>
 
