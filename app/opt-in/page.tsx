@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import { Calendar } from 'lucide-react'
 
 const reviews = [
   {
@@ -24,23 +25,55 @@ const reviews = [
   },
 ]
 
+const GoogleG = () => (
+  <svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true" className="flex-shrink-0">
+    <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.33 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+    <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+    <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+    <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.67 14.62 48 24 48z"/>
+  </svg>
+)
+
+const SmallGoogleLogo = () => (
+  <svg width="12" height="12" viewBox="0 0 18 18" aria-hidden="true" className="flex-shrink-0">
+    <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
+    <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/>
+    <path d="M3.964 10.707A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.707V4.961H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.039l3.007-2.332z" fill="#FBBC05"/>
+    <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.961L3.964 7.293C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+  </svg>
+)
+
 export default function OptInPage() {
-  const [submitted, setSubmitted] = useState(false)
+  const [step, setStep] = useState(1)
+  const [showDisqualify, setShowDisqualify] = useState(false)
   const [formData, setFormData] = useState({
-    fullName: '',
-    businessName: '',
+    name: '',
+    company: '',
     phone: '',
-    postcode: '',
+    email: '',
+    city: '',
   })
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleFieldChange(e: React.ChangeEvent<HTMLInputElement>) {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setSubmitted(true)
+  function handleQualification(qualified: boolean) {
+    if (qualified) {
+      setShowDisqualify(false)
+      setStep(2)
+    } else {
+      setShowDisqualify(true)
+    }
   }
+
+  function handleStep2Submit() {
+    const { name, company, phone, email, city } = formData
+    if (!name || !company || !phone || !email || !city) return
+    setStep(3)
+  }
+
+  const progressWidth = step === 1 ? '33%' : step === 2 ? '66%' : '100%'
 
   return (
     <div
@@ -50,21 +83,37 @@ export default function OptInPage() {
       }}
     >
 
-      {/* ── SECTION 1: Header ── */}
-      <header className="pt-6 pb-2 flex justify-center">
-        <a href="https://corecutdigital.co.uk" target="_blank" rel="noopener noreferrer">
-          <Image
-            src="/Logo.jpg"
-            alt="CoreCut Digital"
-            width={160}
-            height={50}
-            className="h-[50px] w-auto object-contain"
-            style={{ mixBlendMode: 'screen' }}
-          />
-        </a>
+      {/* ── HEADER: Logo left, Google badge right ── */}
+      <header className="pt-4 pb-4">
+        <div className="max-w-4xl mx-auto px-4 flex items-center justify-between">
+          {/* Logo */}
+          <a href="https://corecutdigital.co.uk" target="_blank" rel="noopener noreferrer">
+            <Image
+              src="/logo.png"
+              alt="CoreCut Digital"
+              width={160}
+              height={40}
+              className="h-10 w-auto object-contain"
+              style={{ mixBlendMode: 'screen' }}
+            />
+          </a>
+
+          {/* Google Rating Badge */}
+          <div className="bg-[#111111] border border-white/10 rounded-2xl px-4 py-2 flex items-center gap-3">
+            <GoogleG />
+            <div className="flex flex-col">
+              <span className="text-xs text-gray-400 leading-tight">Google Rating</span>
+              <div className="flex items-center gap-1">
+                <span className="text-xl font-black text-white leading-tight">5.0</span>
+                <span className="text-yellow-400 text-sm leading-none">★★★★★</span>
+              </div>
+              <span className="text-xs text-gray-500 leading-tight">Based on 57+ reviews</span>
+            </div>
+          </div>
+        </div>
       </header>
 
-      {/* ── SECTION 2: Hero ── */}
+      {/* ── HERO ── */}
       <section className="max-w-4xl mx-auto px-4 pt-5 pb-4 text-center">
 
         {/* Pill label */}
@@ -85,7 +134,7 @@ export default function OptInPage() {
           </span>
         </div>
 
-        {/* Headline — Barlow Condensed Black, ALL CAPS, two-tone */}
+        {/* Headline */}
         <h1
           className="uppercase text-center leading-tight"
           style={{
@@ -103,135 +152,179 @@ export default function OptInPage() {
         <p className="text-sm text-gray-400 text-center max-w-lg mx-auto mt-4 leading-relaxed">
           Our typical roofing partner generates £30,000–£90,000 in new revenue within their first 30 days
         </p>
-
-        {/* Google review badge */}
-        <div className="flex justify-center mt-4">
-          <div className="inline-flex items-center gap-3 bg-white/[0.06] border border-white/10 rounded-xl px-5 py-3">
-            {/* Google G logo */}
-            <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
-              <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
-              <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/>
-              <path d="M3.964 10.707A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.707V4.961H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.039l3.007-2.332z" fill="#FBBC05"/>
-              <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.961L3.964 7.293C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
-            </svg>
-            <span className="text-amber-400 text-base leading-none tracking-tight">★★★★★</span>
-            <span className="text-gray-400 text-sm">Google Reviews</span>
-          </div>
-        </div>
       </section>
 
-      {/* ── SECTION 3: VSL Placeholder ── */}
-      <section className="max-w-4xl mx-auto px-4 pb-4">
-        <div
-          className="max-w-2xl mx-auto w-full aspect-video bg-[#111111] rounded-2xl border border-white/10 flex flex-col items-center justify-center gap-4"
-          style={{
-            boxShadow: '0 0 60px rgba(125, 212, 212, 0.12), 0 0 120px rgba(125, 212, 212, 0.05)',
-          }}
-        >
-          {/* VSL VIDEO — ADD EMBED HERE */}
-          <div className="w-16 h-16 rounded-full bg-[#7DD4D4] flex items-center justify-center flex-shrink-0">
-            <svg
-              className="w-6 h-6 text-black ml-1"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path d="M8 5v14l11-7z" />
-            </svg>
-          </div>
-          <p className="text-white/50 text-sm text-center max-w-xs px-4 leading-relaxed">
-            Watch: The Exact System We Use To Get Roofers 25–30 Exclusive Jobs/Month
-          </p>
-        </div>
+      {/* ── 3-STEP FORM ── */}
+      <section className="max-w-4xl mx-auto px-4 pt-2 pb-12">
+        <div className="max-w-md mx-auto mt-8">
+          <div className="bg-[#111111] border border-white/10 rounded-2xl p-6">
 
-        {/* Scroll indicator — matches BiffBosh "CHECK AVAILABILITY! ↓" */}
-        <div className="flex flex-col items-center gap-2 mt-6 mb-2">
-          <p className="text-xs tracking-[0.25em] uppercase text-gray-400 font-medium">
-            Check Availability!
-          </p>
-          <svg
-            className="w-5 h-5 text-[#7DD4D4] animate-bounce"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2.5}
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-          </svg>
-        </div>
-      </section>
-
-      {/* ── SECTION 4: Opt-in Form ── */}
-      <section className="max-w-4xl mx-auto px-4 pt-2 pb-12" id="form">
-        <div className="max-w-md mx-auto">
-          <h2
-            className="uppercase text-center leading-tight mb-2"
-            style={{
-              fontFamily: 'var(--font-barlow)',
-              fontWeight: 900,
-              fontSize: 'clamp(32px, 8vw, 52px)',
-            }}
-          >
-            Check Availability<br />
-            <span style={{ color: '#7DD4D4' }}>In Your Area</span>
-          </h2>
-          {submitted ? (
-            <div className="bg-[#111] border border-white/10 rounded-2xl p-8 text-center">
-              <p className="text-white text-lg font-semibold leading-relaxed">
-                ✅ Thanks {formData.fullName} — we&apos;ll be in touch within 1 business day to confirm your area.
-              </p>
+            {/* Progress bar */}
+            <p className="text-xs text-gray-500 text-right mb-2">Step {step} of 3</p>
+            <div className="h-1.5 rounded-full bg-[#1a1a1a] mb-6 overflow-hidden">
+              <div
+                className="h-full rounded-full bg-[#7DD4D4] transition-all duration-300"
+                style={{ width: progressWidth }}
+              />
             </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-              <input
-                type="text"
-                name="fullName"
-                value={formData.fullName}
-                onChange={handleChange}
-                placeholder="Your name"
-                required
-                className="bg-[#111] border border-white/10 rounded-xl px-4 py-3 text-white w-full placeholder-gray-600 focus:outline-none focus:border-[#7DD4D4]/50 transition-colors"
-              />
-              <input
-                type="text"
-                name="businessName"
-                value={formData.businessName}
-                onChange={handleChange}
-                placeholder="Your roofing company"
-                required
-                className="bg-[#111] border border-white/10 rounded-xl px-4 py-3 text-white w-full placeholder-gray-600 focus:outline-none focus:border-[#7DD4D4]/50 transition-colors"
-              />
-              <input
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                placeholder="Your phone number"
-                required
-                className="bg-[#111] border border-white/10 rounded-xl px-4 py-3 text-white w-full placeholder-gray-600 focus:outline-none focus:border-[#7DD4D4]/50 transition-colors"
-              />
-              <input
-                type="text"
-                name="postcode"
-                value={formData.postcode}
-                onChange={handleChange}
-                placeholder="Your area postcode"
-                required
-                className="bg-[#111] border border-white/10 rounded-xl px-4 py-3 text-white w-full placeholder-gray-600 focus:outline-none focus:border-[#7DD4D4]/50 transition-colors"
-              />
-              <button
-                type="submit"
-                className="w-full bg-[#7DD4D4] text-black font-bold rounded-xl py-4 mt-1 hover:bg-[#6ac4c4] transition-colors duration-200 text-base"
-              >
-                Check My Area Is Available
-              </button>
-            </form>
-          )}
+
+            {/* ── STEP 1: Qualification ── */}
+            {step === 1 && (
+              <div>
+                <p className="font-bold text-white text-lg text-center mb-6">
+                  Do you own a roofing business?
+                </p>
+
+                <div className="flex flex-col gap-3">
+                  <button
+                    onClick={() => handleQualification(true)}
+                    className="w-full bg-[#1a1a1a] border border-white/10 rounded-xl px-4 py-4 text-white text-left flex items-center gap-3 hover:border-[#7DD4D4] transition cursor-pointer"
+                  >
+                    <span>✅</span>
+                    <span>Yes — I have a team of staff or subbies</span>
+                  </button>
+
+                  <button
+                    onClick={() => handleQualification(true)}
+                    className="w-full bg-[#1a1a1a] border border-white/10 rounded-xl px-4 py-4 text-white text-left flex items-center gap-3 hover:border-[#7DD4D4] transition cursor-pointer"
+                  >
+                    <span>✅</span>
+                    <span>Yes — but it&apos;s just me at the moment</span>
+                  </button>
+
+                  <button
+                    onClick={() => handleQualification(false)}
+                    className="w-full bg-[#1a1a1a] border border-white/10 rounded-xl px-4 py-4 text-white text-left flex items-center gap-3 hover:border-[#7DD4D4] transition cursor-pointer"
+                  >
+                    <span>❌</span>
+                    <span>No — I don&apos;t own a roofing business</span>
+                  </button>
+                </div>
+
+                {showDisqualify && (
+                  <div className="bg-red-950 border border-red-800 rounded-xl p-4 mt-4 text-center">
+                    <p className="text-sm text-red-300">
+                      You may not be a good fit for CoreCut at this stage.
+                      <br />
+                      Our system works best for roofing business owners.
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ── STEP 2: Contact Info ── */}
+            {step === 2 && (
+              <div>
+                <button
+                  onClick={() => setStep(1)}
+                  className="text-sm text-gray-500 mb-4 block hover:text-gray-300 transition"
+                >
+                  ← Back
+                </button>
+
+                <p className="font-bold text-white text-lg text-center mb-6">
+                  Where should we send your availability confirmation?
+                </p>
+
+                <div className="flex flex-col">
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleFieldChange}
+                    placeholder="Your full name"
+                    className="bg-[#0a0a0a] border border-white/10 rounded-xl px-4 py-3 text-white w-full mb-3 focus:outline-none focus:border-[#7DD4D4] transition placeholder:text-gray-600"
+                  />
+                  <input
+                    type="text"
+                    name="company"
+                    value={formData.company}
+                    onChange={handleFieldChange}
+                    placeholder="Your roofing company"
+                    className="bg-[#0a0a0a] border border-white/10 rounded-xl px-4 py-3 text-white w-full mb-3 focus:outline-none focus:border-[#7DD4D4] transition placeholder:text-gray-600"
+                  />
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleFieldChange}
+                    placeholder="Your phone number"
+                    className="bg-[#0a0a0a] border border-white/10 rounded-xl px-4 py-3 text-white w-full mb-3 focus:outline-none focus:border-[#7DD4D4] transition placeholder:text-gray-600"
+                  />
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleFieldChange}
+                    placeholder="Your email address"
+                    className="bg-[#0a0a0a] border border-white/10 rounded-xl px-4 py-3 text-white w-full mb-3 focus:outline-none focus:border-[#7DD4D4] transition placeholder:text-gray-600"
+                  />
+                  <input
+                    type="text"
+                    name="city"
+                    value={formData.city}
+                    onChange={handleFieldChange}
+                    placeholder="e.g. Manchester, Leeds, Bristol"
+                    className="bg-[#0a0a0a] border border-white/10 rounded-xl px-4 py-3 text-white w-full mb-3 focus:outline-none focus:border-[#7DD4D4] transition placeholder:text-gray-600"
+                  />
+
+                  <button
+                    onClick={handleStep2Submit}
+                    className="bg-[#7DD4D4] text-black font-bold rounded-xl py-4 w-full mt-2 text-base hover:bg-[#6ac4c4] transition-colors duration-200"
+                  >
+                    Check Availability →
+                  </button>
+
+                  <p className="text-xs text-gray-600 text-center mt-2">
+                    No obligation. Takes less than 60 seconds.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* ── STEP 3: Booking ── */}
+            {step === 3 && (
+              <div>
+                {/* Green availability pill */}
+                <div className="flex justify-center mb-4">
+                  <span className="bg-green-950 border border-green-700 rounded-full px-4 py-2 text-green-400 text-sm font-medium w-fit">
+                    🟢 We still have 1 spot available in {formData.city || 'your'} area
+                  </span>
+                </div>
+
+                <h2 className="font-bold text-white text-xl text-center mb-2">
+                  Book Your Free 10-Min Strategy Call
+                </h2>
+
+                <p className="text-gray-400 text-sm text-center mb-6 leading-relaxed">
+                  Speak with one of our strategists. We&apos;ll show you exactly how many leads we can get you in your area — no pitch, no pressure.
+                </p>
+
+                {/* Calendar placeholder */}
+                <div className="bg-[#0a0a0a] border border-white/10 rounded-xl p-8 text-center min-h-[300px] flex items-center justify-center flex-col gap-3">
+                  <Calendar className="w-12 h-12 text-[#7DD4D4]" />
+                  <p className="text-gray-600 text-sm uppercase tracking-widest">
+                    Calendar Booking Widget
+                  </p>
+                  {/* ADD CALENDLY OR CAL.COM EMBED HERE */}
+                  <a
+                    href="https://appointment.socialscapepromotions.co.uk/widget/bookings/socialscape-roofing-setup"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#7DD4D4] text-sm underline hover:text-[#6ac4c4] transition"
+                  >
+                    Book manually →
+                  </a>
+                </div>
+              </div>
+            )}
+
+          </div>
         </div>
       </section>
 
-      {/* ── SECTION 5: Social Proof ── */}
+      {/* ── SOCIAL PROOF ── */}
       <section className="max-w-4xl mx-auto px-4 pb-20">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {reviews.map((review, i) => (
@@ -248,12 +341,7 @@ export default function OptInPage() {
                   <p className="font-semibold text-white text-sm leading-tight">{review.name}</p>
                   <div className="flex items-center gap-1 mt-0.5">
                     <span className="text-gray-500 text-xs">Review from</span>
-                    <svg width="12" height="12" viewBox="0 0 18 18" aria-hidden="true" className="flex-shrink-0">
-                      <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
-                      <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/>
-                      <path d="M3.964 10.707A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.707V4.961H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.039l3.007-2.332z" fill="#FBBC05"/>
-                      <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.961L3.964 7.293C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
-                    </svg>
+                    <SmallGoogleLogo />
                     <span className="text-[#4285F4] text-xs font-medium">Google</span>
                   </div>
                 </div>
@@ -272,7 +360,7 @@ export default function OptInPage() {
         </div>
       </section>
 
-      {/* ── SECTION 6: Footer ── */}
+      {/* ── FOOTER ── */}
       <footer className="border-t border-white/[0.06] py-10">
         <div className="max-w-4xl mx-auto px-4 flex flex-col items-center gap-4">
           <a href="https://corecutdigital.co.uk" target="_blank" rel="noopener noreferrer">
