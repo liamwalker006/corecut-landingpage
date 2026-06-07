@@ -77,12 +77,18 @@ export default function OptInPage() {
   }
 
   function handleStep2Submit() {
-    const { name, company, phone, email, city } = formData
-    if (!name || !company || !phone || !email || !city) return
+    const { name, company, city } = formData
+    if (!name || !company || !city) return
     setStep(3)
   }
 
-  const progressWidth = step === 1 ? '33%' : step === 2 ? '66%' : '100%'
+  function handleStep3Submit() {
+    const { phone, email } = formData
+    if (!phone || !email) return
+    setStep(4)
+  }
+
+  const progressWidth = step === 1 ? '25%' : step === 2 ? '50%' : step === 3 ? '75%' : '100%'
 
   return (
     <div
@@ -163,13 +169,13 @@ export default function OptInPage() {
 
       </section>
 
-      {/* ── 3-STEP FORM ── */}
+      {/* ── 4-STEP FORM ── */}
       <section className="max-w-4xl mx-auto px-4 pt-0 pb-12">
         <div className="max-w-md mx-auto mt-3">
           <div className="bg-white rounded-2xl p-6 shadow-xl">
 
             {/* Progress bar */}
-            <p className="text-xs text-gray-400 text-right mb-2">Step {step} of 3</p>
+            <p className="text-xs text-gray-400 text-right mb-2">Step {step} of 4</p>
             <div className="h-1.5 rounded-full bg-gray-100 mb-6 overflow-hidden">
               <div
                 className="h-full rounded-full bg-[#7DD4D4] transition-all duration-300"
@@ -224,7 +230,7 @@ export default function OptInPage() {
               </div>
             )}
 
-            {/* ── STEP 2: Contact Info ── */}
+            {/* ── STEP 2: Name, Company, City ── */}
             {step === 2 && (
               <div>
                 <button
@@ -235,7 +241,7 @@ export default function OptInPage() {
                 </button>
 
                 <p className="font-bold text-gray-900 text-lg text-center mb-6">
-                  Where should we send your availability confirmation?
+                  Tell us about your business
                 </p>
 
                 <div className="flex flex-col">
@@ -256,6 +262,42 @@ export default function OptInPage() {
                     className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 w-full mb-3 focus:outline-none focus:border-[#7DD4D4] transition placeholder:text-gray-400"
                   />
                   <input
+                    type="text"
+                    name="city"
+                    value={formData.city}
+                    onChange={handleFieldChange}
+                    placeholder="Your city / area"
+                    className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 w-full mb-3 focus:outline-none focus:border-[#7DD4D4] transition placeholder:text-gray-400"
+                  />
+
+                  <button
+                    onClick={handleStep2Submit}
+                    className="bg-[#7DD4D4] text-black font-bold rounded-xl py-4 w-full mt-2 text-base hover:bg-[#6ac4c4] transition-colors duration-200"
+                  >
+                    Continue →
+                  </button>
+                </div>
+
+                <FormReviewBar />
+              </div>
+            )}
+
+            {/* ── STEP 3: Contact Info ── */}
+            {step === 3 && (
+              <div>
+                <button
+                  onClick={() => setStep(2)}
+                  className="text-sm text-gray-400 mb-4 block hover:text-gray-600 transition"
+                >
+                  ← Back
+                </button>
+
+                <p className="font-bold text-gray-900 text-lg text-center mb-6">
+                  How can we reach you?
+                </p>
+
+                <div className="flex flex-col">
+                  <input
                     type="tel"
                     name="phone"
                     value={formData.phone}
@@ -271,17 +313,9 @@ export default function OptInPage() {
                     placeholder="Your email address"
                     className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 w-full mb-3 focus:outline-none focus:border-[#7DD4D4] transition placeholder:text-gray-400"
                   />
-                  <input
-                    type="text"
-                    name="city"
-                    value={formData.city}
-                    onChange={handleFieldChange}
-                    placeholder="e.g. Manchester, Leeds, Bristol"
-                    className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 w-full mb-3 focus:outline-none focus:border-[#7DD4D4] transition placeholder:text-gray-400"
-                  />
 
                   <button
-                    onClick={handleStep2Submit}
+                    onClick={handleStep3Submit}
                     className="bg-[#7DD4D4] text-black font-bold rounded-xl py-4 w-full mt-2 text-base hover:bg-[#6ac4c4] transition-colors duration-200"
                   >
                     Check Availability →
@@ -296,10 +330,9 @@ export default function OptInPage() {
               </div>
             )}
 
-            {/* ── STEP 3: Booking ── */}
-            {step === 3 && (
+            {/* ── STEP 4: Calendar Booking ── */}
+            {step === 4 && (
               <div>
-                {/* Green availability pill */}
                 <div className="flex justify-center mb-4">
                   <span className="bg-green-50 border border-green-300 rounded-full px-4 py-2 text-green-700 text-sm font-medium w-fit">
                     🟢 We still have 1 spot available in {formData.city || 'your'} area
