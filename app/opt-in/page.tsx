@@ -63,13 +63,15 @@ export default function OptInPage() {
     phone: '',
     email: '',
     city: '',
+    step1Answer: '',
   })
 
   function handleFieldChange(e: React.ChangeEvent<HTMLInputElement>) {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
-  function handleQualification(qualified: boolean) {
+  function handleQualification(qualified: boolean, answer: string) {
+    setFormData((prev) => ({ ...prev, step1Answer: answer }))
     if (qualified) {
       setShowDisqualify(false)
       setStep(2)
@@ -222,7 +224,7 @@ export default function OptInPage() {
 
                 <div className="flex flex-col gap-3">
                   <button
-                    onClick={() => handleQualification(true)}
+                    onClick={() => handleQualification(true, "Yes — I have a team of staff or subbies")}
                     className="w-full bg-white border border-gray-200 rounded-xl px-4 py-4 text-gray-900 text-left flex items-center gap-3 hover:border-[#7DD4D4] transition cursor-pointer shadow-sm"
                   >
                     <span>✅</span>
@@ -230,7 +232,7 @@ export default function OptInPage() {
                   </button>
 
                   <button
-                    onClick={() => handleQualification(true)}
+                    onClick={() => handleQualification(true, "Yes — but it's just me at the moment")}
                     className="w-full bg-white border border-gray-200 rounded-xl px-4 py-4 text-gray-900 text-left flex items-center gap-3 hover:border-[#7DD4D4] transition cursor-pointer shadow-sm"
                   >
                     <span>✅</span>
@@ -238,7 +240,7 @@ export default function OptInPage() {
                   </button>
 
                   <button
-                    onClick={() => handleQualification(false)}
+                    onClick={() => handleQualification(false, "No — I don't own a roofing business")}
                     className="w-full bg-white border border-gray-200 rounded-xl px-4 py-4 text-gray-900 text-left flex items-center gap-3 hover:border-[#7DD4D4] transition cursor-pointer shadow-sm"
                   >
                     <span>❌</span>
