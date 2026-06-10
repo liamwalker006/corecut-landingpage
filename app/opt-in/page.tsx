@@ -457,8 +457,8 @@ export default function OptInPage() {
 
                 <iframe
                   src="https://api.leadconnectorhq.com/widget/booking/miBViE5m9echq1eNJLud"
-                  style={{ width: '100%', border: 'none', overflow: 'hidden', minHeight: '550px' }}
-                  scrolling="no"
+                  style={{ width: '100%', border: 'none', overflow: 'hidden', minHeight: '700px' }}
+                  scrolling="yes"
                   id="miBViE5m9echq1eNJLud_1780870286085"
                 />
 
