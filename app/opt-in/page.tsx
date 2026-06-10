@@ -127,14 +127,11 @@ export default function OptInPage() {
     }
     setIsSubmitting(true)
     try {
-      await fetch(
-        'https://services.leadconnectorhq.com/hooks/MWTJgFgGeot9Z3Ok9tyb/webhook-trigger/28a2e0ab-2846-406b-aaed-9c913701bfd8',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData),
-        }
-      )
+      await fetch('/api/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
     } catch (_) {
       // Silently continue — don't block the user if the webhook fails
     }
