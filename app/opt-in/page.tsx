@@ -60,7 +60,7 @@ export default function OptInPage() {
   const [formData, setFormData] = useState({
     name: '',
     company: '',
-    phone: '',
+    phone: '+44',
     email: '',
     city: '',
     step1Answer: '',
@@ -68,6 +68,17 @@ export default function OptInPage() {
 
   function handleFieldChange(e: React.ChangeEvent<HTMLInputElement>) {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+  }
+
+  function handlePhoneChange(e: React.ChangeEvent<HTMLInputElement>) {
+    let value = e.target.value
+    if (!value.startsWith('+44')) {
+      value = '+44'
+    } else {
+      const rest = value.slice(3).replace(/[^\d ]/g, '')
+      value = '+44' + rest
+    }
+    setFormData((prev) => ({ ...prev, phone: value }))
   }
 
   function handleQualification(qualified: boolean, answer: string) {
@@ -92,7 +103,8 @@ export default function OptInPage() {
 
   async function handleStep3Submit() {
     const { phone, email } = formData
-    if (!phone || !email) return
+    const phoneDigits = phone.replace(/\D/g, '')
+    if (!email || phoneDigits.length < 12) return
     setIsSubmitting(true)
     try {
       await fetch(
@@ -273,7 +285,7 @@ export default function OptInPage() {
                 </button>
 
                 <p className="font-bold text-gray-900 text-lg text-center mb-6">
-                  Tell us about your business
+                  Check if your area is still available
                 </p>
 
                 <div className="flex flex-col">
@@ -339,7 +351,7 @@ export default function OptInPage() {
                 </button>
 
                 <p className="font-bold text-gray-900 text-lg text-center mb-6">
-                  How can we reach you?
+                  Last step — how do we contact you?
                 </p>
 
                 <div className="flex flex-col">
@@ -347,8 +359,9 @@ export default function OptInPage() {
                     type="tel"
                     name="phone"
                     value={formData.phone}
-                    onChange={handleFieldChange}
-                    placeholder="Your phone number"
+                    onChange={handlePhoneChange}
+                    placeholder="+44 7xxx xxxxxx"
+                    maxLength={14}
                     className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 w-full mb-3 focus:outline-none focus:border-[#7DD4D4] transition placeholder:text-gray-400"
                   />
                   <input
