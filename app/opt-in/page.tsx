@@ -57,6 +57,7 @@ export default function OptInPage() {
   const [showDisqualify, setShowDisqualify] = useState(false)
   const [isSearching, setIsSearching] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [phoneError, setPhoneError] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
     company: '',
@@ -78,6 +79,7 @@ export default function OptInPage() {
       const rest = value.slice(3).replace(/[^\d ]/g, '')
       value = '+44' + rest
     }
+    setPhoneError(false)
     setFormData((prev) => ({ ...prev, phone: value }))
   }
 
@@ -104,7 +106,11 @@ export default function OptInPage() {
   async function handleStep3Submit() {
     const { phone, email } = formData
     const phoneDigits = phone.replace(/\D/g, '')
-    if (!email || phoneDigits.length < 12) return
+    if (phoneDigits.length < 12) {
+      setPhoneError(true)
+      return
+    }
+    if (!email) return
     setIsSubmitting(true)
     try {
       await fetch(
@@ -362,8 +368,11 @@ export default function OptInPage() {
                     onChange={handlePhoneChange}
                     placeholder="+44 7xxx xxxxxx"
                     maxLength={14}
-                    className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 w-full mb-3 focus:outline-none focus:border-[#7DD4D4] transition placeholder:text-gray-400"
+                    className={`bg-gray-50 border rounded-xl px-4 py-3 text-gray-900 w-full focus:outline-none transition placeholder:text-gray-400 ${phoneError ? 'border-red-400 focus:border-red-400' : 'border-gray-200 focus:border-[#7DD4D4]'} ${phoneError ? 'mb-1' : 'mb-3'}`}
                   />
+                  {phoneError && (
+                    <p className="text-red-500 text-sm mb-3 pl-1">Please enter a valid UK phone number</p>
+                  )}
                   <input
                     type="email"
                     name="email"
