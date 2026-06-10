@@ -460,10 +460,6 @@ export default function OptInPage() {
                   scrolling="no"
                   id="miBViE5m9echq1eNJLud_1780870286085"
                 />
-                <Script
-                  src="https://link.msgsndr.com/js/form_embed.js"
-                  strategy="lazyOnload"
-                />
 
                 <FormReviewBar />
               </div>
@@ -531,6 +527,10 @@ export default function OptInPage() {
         </div>
       </footer>
 
+      <Script
+        src="https://link.msgsndr.com/js/form_embed.js"
+        strategy="afterInteractive"
+      />
     </div>
   )
 }
