@@ -168,6 +168,7 @@ export default function OptInPage() {
               alt="CoreCut Digital"
               width={160}
               height={40}
+              priority
               className="h-10 w-auto object-contain"
               style={{ mixBlendMode: 'screen' }}
             />
