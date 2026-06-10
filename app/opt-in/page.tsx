@@ -162,7 +162,7 @@ export default function OptInPage() {
       {/* ── HEADER: Logo left (nudged in), Google badge right ── */}
       <header className="pt-4 pb-4">
         <div className="max-w-4xl mx-auto px-4 flex items-center justify-between">
-          <a href="https://corecutdigital.co.uk" target="_blank" rel="noopener noreferrer" className="ml-6">
+          <div className="ml-6">
             <Image
               src="/Logo.jpg"
               alt="CoreCut Digital"
@@ -172,7 +172,7 @@ export default function OptInPage() {
               className="h-10 w-auto object-contain"
               style={{ mixBlendMode: 'screen' }}
             />
-          </a>
+          </div>
 
           {/* Google Rating Badge */}
           <div className="bg-[#111111] border border-white/10 rounded-2xl px-4 py-2 flex items-center gap-3">
