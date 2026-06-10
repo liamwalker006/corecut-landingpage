@@ -58,6 +58,8 @@ export default function OptInPage() {
   const [isSearching, setIsSearching] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [phoneError, setPhoneError] = useState(false)
+  const [emailError, setEmailError] = useState(false)
+  const [step2Errors, setStep2Errors] = useState({ name: false, company: false, city: false })
   const [formData, setFormData] = useState({
     name: '',
     company: '',
@@ -68,7 +70,12 @@ export default function OptInPage() {
   })
 
   function handleFieldChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+    const { name, value } = e.target
+    setFormData((prev) => ({ ...prev, [name]: value }))
+    if (name === 'name' || name === 'company' || name === 'city') {
+      setStep2Errors((prev) => ({ ...prev, [name]: false }))
+    }
+    if (name === 'email') setEmailError(false)
   }
 
   function handlePhoneChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -95,7 +102,11 @@ export default function OptInPage() {
 
   function handleStep2Submit() {
     const { name, company, city } = formData
-    if (!name || !company || !city) return
+    const errors = { name: !name, company: !company, city: !city }
+    if (errors.name || errors.company || errors.city) {
+      setStep2Errors(errors)
+      return
+    }
     setIsSearching(true)
     setTimeout(() => {
       setIsSearching(false)
@@ -110,7 +121,10 @@ export default function OptInPage() {
       setPhoneError(true)
       return
     }
-    if (!email) return
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setEmailError(true)
+      return
+    }
     setIsSubmitting(true)
     try {
       await fetch(
@@ -301,24 +315,36 @@ export default function OptInPage() {
                     value={formData.name}
                     onChange={handleFieldChange}
                     placeholder="Your full name"
-                    className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 w-full mb-3 focus:outline-none focus:border-[#7DD4D4] transition placeholder:text-gray-400"
+                    enterKeyHint="next"
+                    aria-invalid={step2Errors.name}
+                    aria-describedby={step2Errors.name ? 'name-error' : undefined}
+                    className={`bg-gray-50 border rounded-xl px-4 py-3 text-gray-900 w-full focus:outline-none transition placeholder:text-gray-400 ${step2Errors.name ? 'border-red-400 focus:border-red-400 mb-1' : 'border-gray-200 focus:border-[#7DD4D4] mb-3'}`}
                   />
+                  {step2Errors.name && <p id="name-error" className="text-red-500 text-sm mb-3 pl-1">Please enter your name</p>}
                   <input
                     type="text"
                     name="company"
                     value={formData.company}
                     onChange={handleFieldChange}
                     placeholder="Your roofing company"
-                    className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 w-full mb-3 focus:outline-none focus:border-[#7DD4D4] transition placeholder:text-gray-400"
+                    enterKeyHint="next"
+                    aria-invalid={step2Errors.company}
+                    aria-describedby={step2Errors.company ? 'company-error' : undefined}
+                    className={`bg-gray-50 border rounded-xl px-4 py-3 text-gray-900 w-full focus:outline-none transition placeholder:text-gray-400 ${step2Errors.company ? 'border-red-400 focus:border-red-400 mb-1' : 'border-gray-200 focus:border-[#7DD4D4] mb-3'}`}
                   />
+                  {step2Errors.company && <p id="company-error" className="text-red-500 text-sm mb-3 pl-1">Please enter your company name</p>}
                   <input
                     type="text"
                     name="city"
                     value={formData.city}
                     onChange={handleFieldChange}
                     placeholder="Your city / area"
-                    className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 w-full mb-3 focus:outline-none focus:border-[#7DD4D4] transition placeholder:text-gray-400"
+                    enterKeyHint="done"
+                    aria-invalid={step2Errors.city}
+                    aria-describedby={step2Errors.city ? 'city-error' : undefined}
+                    className={`bg-gray-50 border rounded-xl px-4 py-3 text-gray-900 w-full focus:outline-none transition placeholder:text-gray-400 ${step2Errors.city ? 'border-red-400 focus:border-red-400 mb-1' : 'border-gray-200 focus:border-[#7DD4D4] mb-3'}`}
                   />
+                  {step2Errors.city && <p id="city-error" className="text-red-500 text-sm mb-3 pl-1">Please enter your city or area</p>}
 
                   <button
                     onClick={handleStep2Submit}
@@ -368,10 +394,13 @@ export default function OptInPage() {
                     onChange={handlePhoneChange}
                     placeholder="+44 7xxx xxxxxx"
                     maxLength={14}
-                    className={`bg-gray-50 border rounded-xl px-4 py-3 text-gray-900 w-full focus:outline-none transition placeholder:text-gray-400 ${phoneError ? 'border-red-400 focus:border-red-400' : 'border-gray-200 focus:border-[#7DD4D4]'} ${phoneError ? 'mb-1' : 'mb-3'}`}
+                    enterKeyHint="next"
+                    aria-invalid={phoneError}
+                    aria-describedby={phoneError ? 'phone-error' : undefined}
+                    className={`bg-gray-50 border rounded-xl px-4 py-3 text-gray-900 w-full focus:outline-none transition placeholder:text-gray-400 ${phoneError ? 'border-red-400 focus:border-red-400 mb-1' : 'border-gray-200 focus:border-[#7DD4D4] mb-3'}`}
                   />
                   {phoneError && (
-                    <p className="text-red-500 text-sm mb-3 pl-1">Please enter a valid UK phone number</p>
+                    <p id="phone-error" className="text-red-500 text-sm mb-3 pl-1">Please enter a valid UK phone number</p>
                   )}
                   <input
                     type="email"
@@ -379,8 +408,14 @@ export default function OptInPage() {
                     value={formData.email}
                     onChange={handleFieldChange}
                     placeholder="Your email address"
-                    className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 w-full mb-3 focus:outline-none focus:border-[#7DD4D4] transition placeholder:text-gray-400"
+                    enterKeyHint="done"
+                    aria-invalid={emailError}
+                    aria-describedby={emailError ? 'email-error' : undefined}
+                    className={`bg-gray-50 border rounded-xl px-4 py-3 text-gray-900 w-full focus:outline-none transition placeholder:text-gray-400 ${emailError ? 'border-red-400 focus:border-red-400 mb-1' : 'border-gray-200 focus:border-[#7DD4D4] mb-3'}`}
                   />
+                  {emailError && (
+                    <p id="email-error" className="text-red-500 text-sm mb-3 pl-1">Please enter a valid email address</p>
+                  )}
 
                   <button
                     onClick={handleStep3Submit}
