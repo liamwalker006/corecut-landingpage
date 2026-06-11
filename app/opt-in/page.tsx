@@ -226,7 +226,7 @@ export default function OptInPage() {
 
         {/* Urgency subheading */}
         <p className="text-xs text-center mt-3 font-semibold tracking-wide" style={{ color: '#7DD4D4' }}>
-          ⚡ Only 1 spot remaining in most UK areas
+          No results in 30 days? You don't pay a penny.
         </p>
 
       </section>
