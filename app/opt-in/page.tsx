@@ -449,7 +449,7 @@ export default function OptInPage() {
                 </div>
 
                 <h2 className="font-bold text-gray-900 text-xl text-center mb-1">
-                  Book Your Free Strategy Call
+                  Hurry, book your kick-off call now
                 </h2>
                 <p className="text-gray-400 text-sm text-center mb-4">
                   10 minutes. No pitch. Just a clear plan for your area.
