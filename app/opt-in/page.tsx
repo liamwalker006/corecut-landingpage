@@ -254,27 +254,27 @@ export default function OptInPage() {
 
                 <div className="flex flex-col gap-3">
                   <button
-                    onClick={() => handleQualification(true, "Yes — I have a team of staff or subbies")}
+                    onClick={() => handleQualification(true, "Yes, I have a team of staff or subbies")}
                     className="w-full bg-white border border-gray-200 rounded-xl px-4 py-4 text-gray-900 text-left flex items-center gap-3 hover:border-[#7DD4D4] transition cursor-pointer shadow-sm"
                   >
                     <span>✅</span>
-                    <span>Yes — I have a team of staff or subbies</span>
+                    <span>Yes, I have a team of staff or subbies</span>
                   </button>
 
                   <button
-                    onClick={() => handleQualification(true, "Yes — but it's just me at the moment")}
+                    onClick={() => handleQualification(true, "Yes, but it's just me at the moment")}
                     className="w-full bg-white border border-gray-200 rounded-xl px-4 py-4 text-gray-900 text-left flex items-center gap-3 hover:border-[#7DD4D4] transition cursor-pointer shadow-sm"
                   >
                     <span>✅</span>
-                    <span>Yes — but it&apos;s just me at the moment</span>
+                    <span>Yes, but it&apos;s just me at the moment</span>
                   </button>
 
                   <button
-                    onClick={() => handleQualification(false, "No — I don't own a roofing business")}
+                    onClick={() => handleQualification(false, "No, I don't own a roofing business")}
                     className="w-full bg-white border border-gray-200 rounded-xl px-4 py-4 text-gray-900 text-left flex items-center gap-3 hover:border-[#7DD4D4] transition cursor-pointer shadow-sm"
                   >
                     <span>❌</span>
-                    <span>No — I don&apos;t own a roofing business</span>
+                    <span>No, I don&apos;t own a roofing business</span>
                   </button>
                 </div>
 
@@ -381,7 +381,7 @@ export default function OptInPage() {
                 </button>
 
                 <p className="font-bold text-gray-900 text-lg text-center mb-6">
-                  Last step — how do we contact you?
+                  Great we still have 1 spot remaining, how can we contact you?
                 </p>
 
                 <div className="flex flex-col">
@@ -426,7 +426,7 @@ export default function OptInPage() {
                         Sending…
                       </>
                     ) : (
-                      'Continue →'
+                      'Submit'
                     )}
                   </button>
 
@@ -456,11 +456,12 @@ export default function OptInPage() {
                 </p>
 
                 <iframe
-                  src="https://api.leadconnectorhq.com/widget/booking/miBViE5m9echq1eNJLud"
-                  style={{ width: '100%', border: 'none', overflow: 'hidden', minHeight: '700px' }}
-                  scrolling="yes"
-                  id="miBViE5m9echq1eNJLud_1780870286085"
+                  src="https://appointment.socialscapepromotions.co.uk/widget/booking/vCSe9ZrRsljB46H0t0Xv"
+                  style={{ width: '100%', border: 'none', overflow: 'hidden' }}
+                  scrolling="no"
+                  id="vCSe9ZrRsljB46H0t0Xv_1782758104167"
                 />
+                <Script src="https://appointment.socialscapepromotions.co.uk/js/form_embed.js" />
 
                 <FormReviewBar />
               </div>
