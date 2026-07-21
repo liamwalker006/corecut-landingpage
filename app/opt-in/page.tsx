@@ -43,6 +43,49 @@ const SmallGoogleLogo = () => (
   </svg>
 )
 
+const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'] as const
+const UTM_STORAGE_KEY = 'ccd_utm_params'
+
+function captureUtmParams() {
+  try {
+    // Already captured this session — keep first-touch attribution, don't overwrite.
+    if (sessionStorage.getItem(UTM_STORAGE_KEY)) return
+
+    const params = new URLSearchParams(window.location.search)
+    const utms: Record<string, string> = {}
+    UTM_KEYS.forEach((key) => {
+      const value = params.get(key)
+      if (value) utms[key] = value
+    })
+
+    if (Object.keys(utms).length === 0) {
+      utms.utm_source = 'direct'
+    }
+
+    sessionStorage.setItem(UTM_STORAGE_KEY, JSON.stringify(utms))
+  } catch (_) {
+    // sessionStorage unavailable (private browsing, etc.) — tracking is best-effort
+  }
+}
+
+function getStoredUtmParams(): Record<string, string> {
+  try {
+    const raw = sessionStorage.getItem(UTM_STORAGE_KEY)
+    return raw ? JSON.parse(raw) : {}
+  } catch (_) {
+    return {}
+  }
+}
+
+function withUtmParams(url: string): string {
+  const entries = Object.entries(getStoredUtmParams())
+  if (entries.length === 0) return url
+  const query = entries
+    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+    .join('&')
+  return `${url}${url.includes('?') ? '&' : '?'}${query}`
+}
+
 const FormReviewBar = () => (
   <div className="border-t border-gray-100 mt-6 pt-4 flex flex-col items-center gap-1">
     <div className="text-amber-400 text-lg leading-none">★★★★★</div>
@@ -138,6 +181,10 @@ export default function OptInPage() {
     setIsSubmitting(false)
     setStep(4)
   }
+
+  useEffect(() => {
+    captureUtmParams()
+  }, [])
 
   useEffect(() => {
     function handleBookingMessage(event: MessageEvent) {
@@ -456,7 +503,9 @@ export default function OptInPage() {
                 </p>
 
                 <iframe
-                  src="https://appointment.socialscapepromotions.co.uk/widget/booking/vCSe9ZrRsljB46H0t0Xv"
+                  src={withUtmParams(
+                    'https://appointment.socialscapepromotions.co.uk/widget/booking/vCSe9ZrRsljB46H0t0Xv'
+                  )}
                   style={{ width: '100%', border: 'none', overflow: 'hidden' }}
                   scrolling="no"
                   id="vCSe9ZrRsljB46H0t0Xv_1782758104167"
