@@ -45,40 +45,55 @@ const SmallGoogleLogo = () => (
 
 const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'] as const
 const UTM_STORAGE_KEY = 'ccd_utm_params'
+const BOOKING_WIDGET_URL = 'https://appointment.socialscapepromotions.co.uk/widget/booking/vCSe9ZrRsljB46H0t0Xv'
 
-function captureUtmParams() {
-  try {
-    // Already captured this session — keep first-touch attribution, don't overwrite.
-    if (sessionStorage.getItem(UTM_STORAGE_KEY)) return
+// Module-scope cache so repeated calls across renders/steps are free and
+// always return the exact same object this pageview already committed to.
+let capturedUtms: Record<string, string> | null = null
 
-    const params = new URLSearchParams(window.location.search)
-    const utms: Record<string, string> = {}
-    UTM_KEYS.forEach((key) => {
-      const value = params.get(key)
-      if (value) utms[key] = value
-    })
+// Reads UTMs from the current URL and returns them, synchronously. sessionStorage
+// is used only as a best-effort way to preserve first-touch attribution across a
+// later pageview that lacks UTMs (e.g. a refresh after the query string was
+// stripped) — it is never required for the current pageview to have its own UTMs,
+// because that would silently break attribution for anyone with storage blocked
+// (Safari "Block All Cookies", private browsing, some in-app browsers).
+function captureUtmParams(): Record<string, string> {
+  if (capturedUtms) return capturedUtms
+  if (typeof window === 'undefined') return {}
 
-    if (Object.keys(utms).length === 0) {
-      utms.utm_source = 'direct'
-    }
-
-    sessionStorage.setItem(UTM_STORAGE_KEY, JSON.stringify(utms))
-  } catch (_) {
-    // sessionStorage unavailable (private browsing, etc.) — tracking is best-effort
-  }
-}
-
-function getStoredUtmParams(): Record<string, string> {
+  let stored: Record<string, string> | null = null
   try {
     const raw = sessionStorage.getItem(UTM_STORAGE_KEY)
-    return raw ? JSON.parse(raw) : {}
+    if (raw) stored = JSON.parse(raw)
   } catch (_) {
-    return {}
+    // sessionStorage unavailable — fall through to reading the URL directly
   }
+
+  const params = new URLSearchParams(window.location.search)
+  const fromUrl: Record<string, string> = {}
+  UTM_KEYS.forEach((key) => {
+    const value = params.get(key)
+    if (value) fromUrl[key] = value
+  })
+
+  // Prefer this pageview's own UTMs (the ad that was just clicked). Only fall
+  // back to a previously stored first-touch value when the current URL has none.
+  const utms = Object.keys(fromUrl).length > 0 ? fromUrl : (stored && Object.keys(stored).length > 0 ? stored : { utm_source: 'direct' })
+
+  capturedUtms = utms
+
+  try {
+    sessionStorage.setItem(UTM_STORAGE_KEY, JSON.stringify(utms))
+  } catch (_) {
+    // best-effort persistence only; the in-memory value above already covers
+    // this pageview, which is all that's needed to reach the step 4 iframe
+  }
+
+  return capturedUtms
 }
 
-function withUtmParams(url: string): string {
-  const entries = Object.entries(getStoredUtmParams())
+function withUtmParams(url: string, utms: Record<string, string>): string {
+  const entries = Object.entries(utms)
   if (entries.length === 0) return url
   const query = entries
     .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
@@ -182,9 +197,20 @@ export default function OptInPage() {
     setStep(4)
   }
 
+  // Lazy initializer runs synchronously during the initial render, before
+  // paint and before any child (including the step 4 iframe) can mount —
+  // unlike a useEffect, which would fire after the first paint and could
+  // theoretically lose a race with anything reading UTMs earlier.
+  const [utmParams] = useState(() => captureUtmParams())
+
+  const bookingIframeSrc = withUtmParams(BOOKING_WIDGET_URL, utmParams)
+
   useEffect(() => {
-    captureUtmParams()
-  }, [])
+    if (step === 4) {
+      // eslint-disable-next-line no-console
+      console.log('[CoreCut UTM] Booking iframe src rendered on step 4:', bookingIframeSrc)
+    }
+  }, [step, bookingIframeSrc])
 
   useEffect(() => {
     function handleBookingMessage(event: MessageEvent) {
@@ -503,9 +529,7 @@ export default function OptInPage() {
                 </p>
 
                 <iframe
-                  src={withUtmParams(
-                    'https://appointment.socialscapepromotions.co.uk/widget/booking/vCSe9ZrRsljB46H0t0Xv'
-                  )}
+                  src={bookingIframeSrc}
                   style={{ width: '100%', border: 'none', overflow: 'hidden' }}
                   scrolling="no"
                   id="vCSe9ZrRsljB46H0t0Xv_1782758104167"
