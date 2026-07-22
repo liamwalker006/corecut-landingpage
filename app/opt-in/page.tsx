@@ -188,7 +188,14 @@ export default function OptInPage() {
       await fetch('/api/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          utm_source: utmParams.utm_source ?? 'direct',
+          utm_medium: utmParams.utm_medium ?? 'direct',
+          utm_campaign: utmParams.utm_campaign ?? 'direct',
+          utm_content: utmParams.utm_content ?? 'direct',
+          utm_term: utmParams.utm_term ?? 'direct',
+        }),
       })
     } catch (_) {
       // Silently continue — don't block the user if the webhook fails
